@@ -12,7 +12,7 @@
 # Division of work among members: 
 ## Planned Division BEFORE Starting Project
 * Alexa Lupo
-  * Task ?
+  * Task 8
 * Alice Luong
   * README
   * Task 5-7
