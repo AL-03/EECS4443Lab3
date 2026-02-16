@@ -67,6 +67,7 @@ public class EntryFormActivity extends AppCompatActivity {
         these values, displaying them back to the user. The comments below break up this functionality into sections.
          */
         taskDeadline.setOnClickListener(view -> {
+
             // A Calendar object deadlineCalendar is displayed when the user clicks the taskDeadline TextView
             Calendar deadlineCalendar = Calendar.getInstance();
 
@@ -88,11 +89,8 @@ public class EntryFormActivity extends AppCompatActivity {
                 String dayFormat;
                 String monthFormat;
 
-                // The date is checked to make sure a date earlier than today is not entered
-
-
                 // If the day of the month selected is less than 10 (under 2 digits), the formatted day will be displayed with a
-                // preceeding 0
+                // preceding 0
                 if (dd < 10) {
                     dayFormat = "0" + dd;
                 }
@@ -113,7 +111,7 @@ public class EntryFormActivity extends AppCompatActivity {
                 else {
                     monthFormat = String.valueOf(mm);
                 }
-
+              
                 /*
                 This colour setting has an if statement to ensure the textColor is changed from gray to black only once.
                 Essentially, if the text of taskDeadline is equal to "MM/DD/YYYY" (which only occurs in the case that a
@@ -130,7 +128,7 @@ public class EntryFormActivity extends AppCompatActivity {
 
             }, year, month, day);
 
-            // ALEXA - Date Validation
+            // Sets a minimum date of today so users cannot choose a past date
             dialog.getDatePicker().setMinDate(System.currentTimeMillis());
 
             // the onClick ends by showing the new set date with the DatePickerDialog.show() method.
@@ -156,6 +154,27 @@ public class EntryFormActivity extends AppCompatActivity {
 
         // If the createTaskButton is clicked, a few things occur. They are all defined in sections below.
         createTaskButton.setOnClickListener(v -> {
+            String title=taskTitle.getText().toString().trim();
+            String deadline=taskDeadline.getText().toString().trim();
+            String description=taskDescription.getText().toString().trim();
+
+            boolean isValid=true;
+
+            //check to ensure user entered task name and deadline
+            if(title.isEmpty()){
+                Toast.makeText(EntryFormActivity.this, "Please enter a task title.", Toast.LENGTH_SHORT).show();
+                isValid=false;
+            }
+            //user must choose a deadline date
+            if(deadline.equals("MM/DD/YYYY")){
+                Toast.makeText(EntryFormActivity.this, "Please choose a task deadline.", Toast.LENGTH_SHORT).show();
+                isValid=false;
+            }
+            //if user input is not valid, do not continue
+            if(!isValid){
+                return;
+            }
+
 
             // In the case that the demo Checkbox is checked, the information from the taskTitle, taskDeadline
             // and taskDescription are stored in SQLite (local database)

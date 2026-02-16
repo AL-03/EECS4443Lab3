@@ -12,14 +12,14 @@
 # Division of work among members: 
 ## Planned Division BEFORE Starting Project
 * Alexa Lupo
-  * Task ?
+  * Task 8
 * Alice Luong
   * README
   * Task 5-7
 * Maya Shamir
   * Task 3, 7
 * Sheraz Ahmad
-  * Task ?
+  * Task 4
 
 ## Final Contributions
 * Alexa Lupo
