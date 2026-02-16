@@ -89,7 +89,7 @@ public class EntryFormActivity extends AppCompatActivity {
                 String monthFormat;
 
                 // The date is checked to make sure a date earlier than today is not entered
-                // ALEXA - Date Validation
+
 
                 // If the day of the month selected is less than 10 (under 2 digits), the formatted day will be displayed with a
                 // preceeding 0
@@ -129,6 +129,9 @@ public class EntryFormActivity extends AppCompatActivity {
                 taskDeadline.setText(MessageFormat.format("{0}/{1}/{2}", monthFormat, dayFormat, String.valueOf(yyyy)));
 
             }, year, month, day);
+
+            // ALEXA - Date Validation
+            dialog.getDatePicker().setMinDate(System.currentTimeMillis());
 
             // the onClick ends by showing the new set date with the DatePickerDialog.show() method.
             dialog.show();
