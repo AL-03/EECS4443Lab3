@@ -47,14 +47,14 @@ public class MainActivity extends AppCompatActivity {
 
         // Access addTask button from activity_main.xml
         addTaskButton = findViewById(R.id.addTask);
-        // EDIT: When addTask clicked, switch to the AddTask screen
-//        addTaskButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent(MainActivity.this, EntryFormActivity.class);
-//                startActivity(intent);
-//            }
-//        });
+        // When addTask clicked, switch to the AddTask screen
+        addTaskButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, EntryFormActivity.class);
+                startActivity(intent);
+            }
+        });
 
         // Locate the RecyclerView object from activity_main.xml
         recyclerView = findViewById(R.id.recyclerView);

@@ -67,14 +67,15 @@ public class EntryFormActivity extends AppCompatActivity {
         these values, displaying them back to the user. The comments below break up this functionality into sections.
          */
         taskDeadline.setOnClickListener(view -> {
-            // A Calendar object is displayed when the user clicks the taskDeadline TextView
-            Calendar today = Calendar.getInstance();
+
+            // A Calendar object deadlineCalendar is displayed when the user clicks the taskDeadline TextView
+            Calendar deadlineCalendar = Calendar.getInstance();
+
             // ints for the year, month, and day components of the date are fetched from built-in Calendar attributes
             // YEAR, MONTH, and DAY_OF_MONTH
-            int year = today.get(Calendar.YEAR);
-            int month = today.get(Calendar.MONTH);
-            int day = today.get(Calendar.DAY_OF_MONTH);
-
+            int year = deadlineCalendar.get(Calendar.YEAR);
+            int month = deadlineCalendar.get(Calendar.MONTH);
+            int day = deadlineCalendar.get(Calendar.DAY_OF_MONTH);
 
             // A new DatePickerDialog named dialog is created, taking as its context the present Java file, and establishing a new
             // OnDateSetListener to allow the selected date to be displayed back in the taskDeadline TextView
@@ -82,6 +83,7 @@ public class EntryFormActivity extends AppCompatActivity {
 // at the end of fhe format setting, the DatePickerDialog also takes the year, month, and day integers which have
 // been linked to Calendar.YEAR, Calendar.MONTH, and Calendar.DAY_OF_MONTH respectively
             DatePickerDialog dialog = new DatePickerDialog(EntryFormActivity.this, (datePicker, yyyy, mm, dd) -> {
+
                 // Strings dayFormat and monthFormat are created for the sake of always displaying day and month in format
                 // dd and mm, even when their values are less than 2 digits
                 String dayFormat;
@@ -109,6 +111,7 @@ public class EntryFormActivity extends AppCompatActivity {
                 else {
                     monthFormat = String.valueOf(mm);
                 }
+              
                 /*
                 This colour setting has an if statement to ensure the textColor is changed from gray to black only once.
                 Essentially, if the text of taskDeadline is equal to "MM/DD/YYYY" (which only occurs in the case that a
@@ -125,7 +128,7 @@ public class EntryFormActivity extends AppCompatActivity {
 
             }, year, month, day);
 
-            // ALEXA - Sets a minimum date of today so users cannot choose a past date
+            // Sets a minimum date of today so users cannot choose a past date
             dialog.getDatePicker().setMinDate(System.currentTimeMillis());
 
             // the onClick ends by showing the new set date with the DatePickerDialog.show() method.
