@@ -13,7 +13,7 @@ import java.sql.SQLException;
         private static String deadline = "";
         private static String description = "";
 
-        //Inserts the tasks information into thge database.
+        //Inserts the tasks information into the database.
         public static void insertNote(String taskTitle, String taskDeadline, String taskDescription) {
             // SQL INSERT statement with placeholders (?)
             String sql = "INSERT INTO users(taskTitle, taskDeadline, taskDescription) VALUES(?, ?, ?)";
