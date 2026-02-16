@@ -12,7 +12,7 @@ import java.sql.SQLException;
         private static String title = "";
         private static String deadline = "";
         private static String description = "";
-        private static int currentSize;
+        private static int currentSize = 0;
 
         //Inserts the tasks information into the database.
         public static void insertNote(String taskTitle, String taskDeadline, String taskDescription) {
