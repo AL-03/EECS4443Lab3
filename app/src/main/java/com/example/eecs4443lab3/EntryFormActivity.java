@@ -59,11 +59,6 @@ public class EntryFormActivity extends AppCompatActivity {
         createTaskButton = findViewById(R.id.createTaskButton);
         demoCheckBox = findViewById(R.id.demoCheckBox);
 
-
-
-
-
-
         // An onClickListener is created for the TextView such that users can edit the date after clicking anywhere within the field
         /*
         The onClick method fetches an instance of a calendar object, fetches the year, month, and day values from the
@@ -83,8 +78,8 @@ public class EntryFormActivity extends AppCompatActivity {
             // A new DatePickerDialog named dialog is created, taking as its context the present Java file, and establishing a new
             // OnDateSetListener to allow the selected date to be displayed back in the taskDeadline TextView
             // onDateSet gets a datePicker object, and year, month, and day integers as its parameters
-// at the end of fhe format setting, the DatePickerDialog also takes the year, month, and day integers which have
-// been linked to Calendar.YEAR, Calendar.MONTH, and Calendar.DAY_OF_MONTH respectively
+            // at the end of fhe format setting, the DatePickerDialog also takes the year, month, and day integers which have
+            // been linked to Calendar.YEAR, Calendar.MONTH, and Calendar.DAY_OF_MONTH respectively
             DatePickerDialog dialog = new DatePickerDialog(EntryFormActivity.this, (datePicker, yyyy, mm, dd) -> {
 
                 // Strings dayFormat and monthFormat are created for the sake of always displaying day and month in format

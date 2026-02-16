@@ -1,6 +1,7 @@
 package com.example.eecs4443lab3;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,6 +39,16 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.task.setText(taskList.get(position).getTaskName());
         holder.deadline.setText(taskList.get(position).getDeadline());
+
+        // When user clicks on an item, switch to DetailActivity screen and pass in taskName and deadline
+        holder.itemView.setOnClickListener(v -> {
+            Intent intent = new Intent(v.getContext(), DetailActivity.class);
+
+            intent.putExtra("taskName", taskList.get(position).getTaskName());
+            intent.putExtra("deadline", taskList.get(position).getDeadline());
+
+            v.getContext().startActivity(intent);
+        });
     }
 
     // Allows RecyclerView to understand number of tasks to display
