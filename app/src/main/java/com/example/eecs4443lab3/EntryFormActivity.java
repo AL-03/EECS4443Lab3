@@ -1,7 +1,9 @@
 package com.example.eecs4443lab3;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
@@ -32,6 +34,8 @@ public class EntryFormActivity extends AppCompatActivity {
     Button cancelButton;
     Button createTaskButton;
     CheckBox demoCheckBox;
+    int numOfNotes = 0;
+    SharedPreferences sharedPrefs;
 
     // Within onCreate, the content is set to the activity_entry_form.xml file
     @Override
@@ -67,7 +71,6 @@ public class EntryFormActivity extends AppCompatActivity {
         these values, displaying them back to the user. The comments below break up this functionality into sections.
          */
         taskDeadline.setOnClickListener(view -> {
-
             // A Calendar object deadlineCalendar is displayed when the user clicks the taskDeadline TextView
             Calendar deadlineCalendar = Calendar.getInstance();
 
@@ -111,7 +114,7 @@ public class EntryFormActivity extends AppCompatActivity {
                 else {
                     monthFormat = String.valueOf(mm);
                 }
-              
+
                 /*
                 This colour setting has an if statement to ensure the textColor is changed from gray to black only once.
                 Essentially, if the text of taskDeadline is equal to "MM/DD/YYYY" (which only occurs in the case that a
@@ -179,15 +182,26 @@ public class EntryFormActivity extends AppCompatActivity {
             // In the case that the demo Checkbox is checked, the information from the taskTitle, taskDeadline
             // and taskDescription are stored in SQLite (local database)
 
-            if (demoCheckBox.isChecked())
+            if(demoCheckBox.isChecked())
             {
-                // SHERAZ - SQLITE IMPLEMENTATION AND LINKING TO TASKTITLE, TASKDEADLINE, TASKDESCRIPTION
+                  // Uploads the data to the SQLite database
+                  SQLiteDatabase.insertNote(taskTitle.getText().toString(), taskDeadline.getText().toString(), taskDescription.getText().toString());
             }
 
             // In the case that the demo Checkbox is not checked, the default storage method for the task information
             // will be kept in SharedPreferences
             else {
-                // SHERAZ - SHAREDPREFERENCES AND LINKING TO TASKTITLE, TASKDEADLINE, TASKDESCRIPTION
+                // Gets the shared preferences
+                sharedPrefs = getSharedPreferences("/data/data/com.example.eecs4443lab3/shared_prefs/data.xml", Context.MODE_PRIVATE);
+
+                // Puts the key-value pair
+                sharedPrefs.edit().putString("title" + numOfNotes, taskTitle.getText().toString());
+                sharedPrefs.edit().putString("deadline" + numOfNotes, taskDeadline.getText().toString());
+                sharedPrefs.edit().putString("description" + numOfNotes, taskDescription.getText().toString());
+
+                // Applies the changes to the file
+                sharedPrefs.edit().apply();
+                numOfNotes++;
             }
 
             // After the task has been stored, the information must be cleared from taskTitle, taskDeadline, and taskDescription

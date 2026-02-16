@@ -3,6 +3,7 @@ package com.example.eecs4443lab3;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.SharedPreferences;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
