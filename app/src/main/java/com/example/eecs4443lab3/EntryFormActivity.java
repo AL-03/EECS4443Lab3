@@ -177,7 +177,7 @@ public class EntryFormActivity extends AppCompatActivity {
 
             // A feedback message is provided to the user. The entry form is not exited out of until the cancelButton is clicked,
             // so no Intent is created to return to MainActivity
-            Toast.makeText(EntryFormActivity.this, "Task created successfully!", 3);
+            Toast.makeText(EntryFormActivity.this, "Task created successfully!", Toast.LENGTH_SHORT).show();
 
         });
     }
