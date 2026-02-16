@@ -34,7 +34,7 @@ public class EntryFormActivity extends AppCompatActivity {
     Button cancelButton;
     Button createTaskButton;
     CheckBox demoCheckBox;
-    int numOfNotes = 0;
+    int numOfTasks = 0;
     SharedPreferences sharedPrefs;
 
     // Within onCreate, the content is set to the activity_entry_form.xml file
@@ -147,7 +147,7 @@ public class EntryFormActivity extends AppCompatActivity {
             // the format string with gray color for the task deadline
             taskTitle.setText("");
             taskDeadline.setText("MM/DD/YYYY");
-            taskDeadline.setTextColor(858585);
+            taskDeadline.setTextColor(Color.GRAY);
             taskDescription.setText("");
 
             // Cancel then takes the user back to the Main Activity
@@ -159,7 +159,6 @@ public class EntryFormActivity extends AppCompatActivity {
         createTaskButton.setOnClickListener(v -> {
             String title=taskTitle.getText().toString().trim();
             String deadline=taskDeadline.getText().toString().trim();
-            String description=taskDescription.getText().toString().trim();
 
             boolean isValid=true;
 
@@ -192,23 +191,26 @@ public class EntryFormActivity extends AppCompatActivity {
             // will be kept in SharedPreferences
             else {
                 // Gets the shared preferences
-                sharedPrefs = getSharedPreferences("/data/data/com.example.eecs4443lab3/shared_prefs/data.xml", Context.MODE_PRIVATE);
+                sharedPrefs=getSharedPreferences("Task Information", MODE_PRIVATE);
 
                 // Puts the key-value pair
-                sharedPrefs.edit().putString("title" + numOfNotes, taskTitle.getText().toString());
-                sharedPrefs.edit().putString("deadline" + numOfNotes, taskDeadline.getText().toString());
-                sharedPrefs.edit().putString("description" + numOfNotes, taskDescription.getText().toString());
+                SharedPreferences.Editor editor = sharedPrefs.edit();
+                editor.putString("title" + numOfTasks, taskTitle.getText().toString());
+                editor.putString("deadline" + numOfTasks, taskDeadline.getText().toString());
+                editor.putString("description" + numOfTasks, taskDescription.getText().toString());
 
                 // Applies the changes to the file
-                sharedPrefs.edit().apply();
-                numOfNotes++;
+                editor.apply();
+                
+                // Increases number of tasks created
+                numOfTasks++;
             }
 
             // After the task has been stored, the information must be cleared from taskTitle, taskDeadline, and taskDescription
             // The colour is also reset for the taskDeadline TextView. This code is equivalent to that in the cancelButton
             taskTitle.setText("");
             taskDeadline.setText("MM/DD/YYYY");
-            taskDeadline.setTextColor(858585);
+            taskDeadline.setTextColor(Color.GRAY);
             taskDescription.setText("");
 
             // A feedback message is provided to the user. The entry form is not exited out of until the cancelButton is clicked,
