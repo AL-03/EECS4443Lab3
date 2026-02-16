@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">EECS4443Lab3</string>
+    <string name="header">TaskLoggerizer</string>
+    <string name="add_task">Add Task</string>
+    <!-- Task details -->
+    <!-- EDIT: replace w/ actual text -->
+    <string name="task">Task</string>
+    <string name="deadline">Deadline: %s</string>
 </resources>
