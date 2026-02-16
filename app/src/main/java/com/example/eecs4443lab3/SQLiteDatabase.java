@@ -12,6 +12,7 @@ import java.sql.SQLException;
         private static String title = "";
         private static String deadline = "";
         private static String description = "";
+        private static int currentSize;
 
         //Inserts the tasks information into the database.
         public static void insertNote(String taskTitle, String taskDeadline, String taskDescription) {
@@ -33,6 +34,8 @@ import java.sql.SQLException;
             } catch (SQLException e) {
                 System.err.println(e.getMessage());
             }
+
+            currentSize++;
         }
 
         //Select the row from where the getters will grab the data from (0 based index).
@@ -59,19 +62,27 @@ import java.sql.SQLException;
         }
 
         //Getter methods
-        private static String getTitle()
+        public static String getTitle()
         {
           return title;
         }
 
-        private static String getDeadline()
+        public static String getDeadline()
         {
             return deadline;
         }
 
-        private static String getDescription()
+        public static String getDescription()
         {
           return description;
         }
+
+        //index of last element added to the database.
+        public static int getCurrentSize()
+        {
+            return num - 1;
+        }
+
+        
 
 }
