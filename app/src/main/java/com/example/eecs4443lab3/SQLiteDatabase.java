@@ -58,6 +58,7 @@ import java.sql.SQLException;
             catch(Exception e){}
         }
 
+        //Getter methods
         private static String getTitle()
         {
           return title;
