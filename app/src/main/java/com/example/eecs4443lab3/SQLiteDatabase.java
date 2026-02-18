@@ -80,7 +80,7 @@ import java.sql.SQLException;
         //index of last element added to the database.
         public static int getCurrentSize()
         {
-            return num - 1;
+            return currentSize - 1;
         }
 
         

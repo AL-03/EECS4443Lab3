@@ -11,4 +11,5 @@
     <string name="add_task_description">Add task description</string>
     <string name="cancel">Cancel</string>
     <string name="add_task">Add Task</string>
+    <string name="task_deadline">Deadline: %s</string>
 </resources>

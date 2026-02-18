@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     // Declare RecyclerView and adapter variables
     RecyclerView recyclerView;
     RecyclerViewAdapter adapter;
+    SharedPreferences sharedPrefs;
 
     // EDIT: Declaring an arrayList of Item objects, which will have 15 hardcoded Item objects added to it
     ArrayList<Task> taskList = new ArrayList<>();
@@ -57,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        // Load data from SharedPreferences
+        taskList = loadTasks();
+
         // Locate the RecyclerView object from activity_main.xml
         recyclerView = findViewById(R.id.recyclerView);
         // Create adapter to connect RecyclerView to data
@@ -65,19 +69,24 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         // Create and set LinearLayoutManager for the RecyclerView to show list items vertically and not in reverse order
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+    }
 
-        // EDIT: Hard-coded list
-        taskList.add(new Task("task1", "deadline1", "note1"));
-        taskList.add(new Task("task2", "deadline2", "note2"));
-        taskList.add(new Task("task3", "deadline3", "note3"));
-        taskList.add(new Task("task4", "deadline4", "note4"));
-        taskList.add(new Task("task5", "deadline5", "note5"));
-        taskList.add(new Task("task6", "deadline6", "note6"));
-        taskList.add(new Task("task7", "deadline7", "note7"));
-        taskList.add(new Task("task8", "deadline8", "note8"));
+    // Load tasks from SharedPreferences into ArrayList
+    private ArrayList<Task> loadTasks() {
+        taskList.clear();
+        sharedPrefs = getSharedPreferences("TaskInformation", MODE_PRIVATE);
 
-        // Notify adapter that arraylist changed
-        adapter.notifyDataSetChanged();
+        for (int i = 0; i < sharedPrefs.getInt("taskCount", 0); i++) {
+            String title = sharedPrefs.getString("title" + i, "Task not found");
+            String deadline = sharedPrefs.getString("deadline" + i, "Deadline not found");
+            String desc = sharedPrefs.getString("description" + i, "Description not found");
+
+            if (title != null && deadline != null && desc != null) {
+                taskList.add(new Task(title, deadline, desc));
+            }
+        }
+
+        return taskList;
     }
 }
 

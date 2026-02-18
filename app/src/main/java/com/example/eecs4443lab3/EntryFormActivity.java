@@ -34,7 +34,7 @@ public class EntryFormActivity extends AppCompatActivity {
     Button cancelButton;
     Button createTaskButton;
     CheckBox demoCheckBox;
-    int numOfTasks = 0;
+    int numOfTasks;
     SharedPreferences sharedPrefs;
 
     // Within onCreate, the content is set to the activity_entry_form.xml file
@@ -186,13 +186,18 @@ public class EntryFormActivity extends AppCompatActivity {
             // will be kept in SharedPreferences
             else {
                 // Gets the shared preferences
-                sharedPrefs=getSharedPreferences("Task Information", MODE_PRIVATE);
+                sharedPrefs=getSharedPreferences("TaskInformation", MODE_PRIVATE);
+                // Keep count of number of tasks
+                numOfTasks = sharedPrefs.getInt("taskCount", 0);
 
                 // Puts the key-value pair
                 SharedPreferences.Editor editor = sharedPrefs.edit();
                 editor.putString("title" + numOfTasks, taskTitle.getText().toString());
                 editor.putString("deadline" + numOfTasks, taskDeadline.getText().toString());
                 editor.putString("description" + numOfTasks, taskDescription.getText().toString());
+
+                // Update count of number of tasks
+                editor.putInt("taskCount", numOfTasks + 1);
 
                 // Applies the changes to the file
                 editor.apply();

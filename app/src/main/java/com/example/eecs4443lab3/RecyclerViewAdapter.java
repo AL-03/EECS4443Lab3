@@ -39,15 +39,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // Based on RecyclerView's position (i.e. what's currently displayed on-screen)
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.task.setText(taskList.get(position).getTaskName());
-        holder.deadline.setText(taskList.get(position).getDeadline());
+        Task task = taskList.get(position);
+        holder.task.setText(task.getTaskName());
+        holder.deadline.setText(task.getDeadline());
 
         // If user clicks on an item, switch to DetailActivity screen and pass in taskName and deadline
         holder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), DetailActivity.class);
 
-            intent.putExtra("taskName", taskList.get(position).getTaskName());
-            intent.putExtra("deadline", taskList.get(position).getDeadline());
+            intent.putExtra("taskName", task.getTaskName());
+            intent.putExtra("deadline", task.getDeadline());
+            intent.putExtra("desc", task.getNotes());
 
             v.getContext().startActivity(intent);
         });
