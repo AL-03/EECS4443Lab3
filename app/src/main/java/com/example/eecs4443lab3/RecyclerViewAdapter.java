@@ -12,18 +12,20 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-// EDIT: Temporary list
 import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     Context context;
-    // EDIT: Temporary list
+    // Task list
     ArrayList<Task> taskList = new ArrayList<>();
+    // Needed for long press function
+    TaskListener listener;
 
-    // EDIT: Should take data from db, not arraylist
-    public RecyclerViewAdapter(Context context, ArrayList<Task> taskList) {
+    // EDIT: Should take data from db too
+    public RecyclerViewAdapter(Context context, ArrayList<Task> taskList, TaskListener listener) {
         this.context = context;
         this.taskList = taskList;
+        this.listener = listener;
     }
 
     // Inflate the layout and actually create view of each task
@@ -56,7 +58,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         // If user does a long press, offer option to delete or update the task
         holder.itemView.setOnLongClickListener(v -> {
-            showOptionsDialogue();
+            listener.onTaskLongPressed(position);
             return true;
         });
     }
@@ -65,28 +67,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public int getItemCount() {
         return taskList.size();
-    }
-
-    // EDIT: Include info needed to update & delete
-    // Creates dialogue box after user long clicks a task
-    private void showOptionsDialogue() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
-        builder.setTitle("Task Options");
-
-        String[] options = {"Update", "Delete"};
-
-        builder.setItems(options, (dialog, which) -> {
-            // EDIT: Show Update dialogue box if user clicked "Update"
-            if (which == 0) {
-                Toast.makeText(context, "Update task", Toast.LENGTH_SHORT).show();
-            }
-            // EDIT: Delete task if user clicked "Delete"
-            else {
-                Toast.makeText(context, "Delete task", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        builder.show();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -99,5 +79,11 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             task = itemView.findViewById(R.id.task);
             deadline = itemView.findViewById(R.id.deadline);
         }
+    }
+
+    // Used to notify MainActivity when user has long-pressed on a task
+    // MainActivity implements the logic for onTaskLongPressed for clear separation of concerns between UI and logic
+    public interface TaskListener {
+        void onTaskLongPressed(int pos);
     }
 }
