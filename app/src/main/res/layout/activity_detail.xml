@@ -5,11 +5,12 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#D4F0ED"
     tools:context=".DetailActivity">
 
     <ScrollView
-        android:layout_width="409dp"
-        android:layout_height="729dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -49,8 +50,8 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="15dp"
                 android:text="@string/description"
-                android:textAlignment="center"
-                android:textSize="12sp" />
+                android:textSize="16sp"
+                android:gravity="start" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,6 +36,7 @@ public class EntryFormActivity extends AppCompatActivity {
     CheckBox demoCheckBox;
     int numOfTasks;
     SharedPreferences sharedPrefs;
+    private DBManager dbManager;
 
     // Within onCreate, the content is set to the activity_entry_form.xml file
     @Override
@@ -48,6 +49,10 @@ public class EntryFormActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        // Open SQLite connection to add a new task
+        dbManager = new DBManager(this);
+        dbManager.open();
 
         // The variables defined at the top are linked to the taskTitle EditText,
         // taskDeadline TextView, taskDescription EditText, cancelButton Button,
@@ -179,7 +184,7 @@ public class EntryFormActivity extends AppCompatActivity {
             if(demoCheckBox.isChecked())
             {
                   // Uploads the data to the SQLite database
-                  SQLiteDatabase.insertNote(taskTitle.getText().toString(), taskDeadline.getText().toString(), taskDescription.getText().toString());
+                  dbManager.insert(taskTitle.getText().toString(), taskDeadline.getText().toString(), taskDescription.getText().toString(), true);
             }
 
             // In the case that the demo Checkbox is not checked, the default storage method for the task information

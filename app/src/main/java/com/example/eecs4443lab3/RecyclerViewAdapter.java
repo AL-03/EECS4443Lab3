@@ -16,12 +16,11 @@ import java.util.ArrayList;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
     Context context;
-    // Task list
+    // Task list (will be populated from information from SharedPreferences and SQLite)
     ArrayList<Task> taskList = new ArrayList<>();
     // Needed for long press function
     TaskListener listener;
 
-    // EDIT: Should take data from db too
     public RecyclerViewAdapter(Context context, ArrayList<Task> taskList, TaskListener listener) {
         this.context = context;
         this.taskList = taskList;
@@ -58,7 +57,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         // If user does a long press, offer option to delete or update the task
         holder.itemView.setOnLongClickListener(v -> {
-            listener.onTaskLongPressed(position);
+            listener.onTaskLongPressed(task);
             return true;
         });
     }
@@ -84,6 +83,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     // Used to notify MainActivity when user has long-pressed on a task
     // MainActivity implements the logic for onTaskLongPressed for clear separation of concerns between UI and logic
     public interface TaskListener {
-        void onTaskLongPressed(int pos);
+        void onTaskLongPressed(Task task);
     }
 }
