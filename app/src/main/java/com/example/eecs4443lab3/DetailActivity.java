@@ -1,6 +1,7 @@
 package com.example.eecs4443lab3;
 
 import android.os.Bundle;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,6 +22,14 @@ public class DetailActivity extends AppCompatActivity {
             return insets;
         });
 
-        // EDIT: Get & display data from db/SharedPrefs
+        // Get and display data from Intent
+        TextView header = findViewById(R.id.detail_header);
+        header.setText(getIntent().getStringExtra("taskName"));
+
+        TextView deadline = findViewById(R.id.detail_deadline);
+        deadline.setText(getString(R.string.task_deadline, getIntent().getStringExtra("deadline")));
+
+        TextView desc = findViewById(R.id.detail_desc);
+        desc.setText(getIntent().getStringExtra("desc"));
     }
 }

@@ -1,5 +1,8 @@
 package com.example.eecs4443lab3;
 
+import android.database.Cursor;
+import android.os.Bundle;
+
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -7,9 +10,9 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.CheckBox;
 //import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.SimpleCursorAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,46 +26,88 @@ import androidx.core.view.WindowInsetsCompat;
 import java.text.MessageFormat;
 import java.util.Calendar;
 
-public class EntryFormActivity extends AppCompatActivity {
-
+public class EditTaskActivity extends AppCompatActivity {
     // Variables are established to be linked to the associated
-    // EditText, TextView, Button, and CheckBox objects in the xml file activity_entry_form.xml
+    // EditText, TextView, and Button objects in the xml file activity_edit_task.xml
 
     EditText taskTitle;
     TextView taskDeadline;
     EditText taskDescription;
     Button cancelButton;
-    Button createTaskButton;
-    CheckBox demoCheckBox;
-    int numOfTasks;
+    Button saveButton;
+    // Defines task's position in SharedPreferences (if that's where it's stored)
+    int spPos;
+    // Declare SharedPreferences variable
     SharedPreferences sharedPrefs;
+    // Declare db-related variables
     private DBManager dbManager;
 
-    // Within onCreate, the content is set to the activity_entry_form.xml file
+    // Within onCreate, the content is set to the activity_edit_task.xml file
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_entry_form);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.entryFormMain), (v, insets) -> {
+        setContentView(R.layout.activity_edit_task);
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.editTaskMain), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // Open SQLite connection to add a new task
-        dbManager = new DBManager(this);
-        dbManager.open();
-
         // The variables defined at the top are linked to the taskTitle EditText,
-        // taskDeadline TextView, taskDescription EditText, cancelButton Button,
-        // createTaskButton Button, and demoCheckbox Buttons found in the activity_entry_form.xml
+        // taskDeadline TextView, taskDescription EditText, cancelButton Button, and
+        // saveButton Button found in the activity_edit_task.xml
         taskTitle = findViewById(R.id.taskTitle);
         taskDeadline = findViewById(R.id.taskDeadline);
         taskDescription = findViewById(R.id.taskDescription);
         cancelButton = findViewById(R.id.cancelButton);
-        createTaskButton = findViewById(R.id.createTaskButton);
-        demoCheckBox = findViewById(R.id.demoCheckBox);
+        saveButton = findViewById(R.id.saveButton);
+
+        // Get task ID and determine data source from intent
+        String taskID = getIntent().getStringExtra("taskID");
+        boolean storedInSQLite = getIntent().getBooleanExtra("storedInSQLite", true);
+
+        // Determine whether task was saved in SQLite
+        // If so, get the task information from SQLite
+        if (storedInSQLite) {
+            // Open SQLite db connection
+            dbManager = new DBManager(this);
+            dbManager.open();
+
+            // Get task, given its id
+            Cursor cursor = dbManager.fetchTaskByID(Long.parseLong(taskID));
+
+            if (cursor.moveToFirst()) {
+                // Set display text to be current values from SQLite
+                taskTitle.setText(cursor.getString(cursor.getColumnIndexOrThrow(SQLiteDatabaseHelper.COLUMN_TITLE)));
+                taskDeadline.setText(cursor.getString(cursor.getColumnIndexOrThrow(SQLiteDatabaseHelper.COLUMN_DEADLINE)));
+                taskDescription.setText(cursor.getString(cursor.getColumnIndexOrThrow(SQLiteDatabaseHelper.COLUMN_DESCRIPTION)));
+                // Close cursor connection
+                cursor.close();
+            }
+            else {
+                // If task can't be found, add placeholder text
+                taskTitle.setText("Task not found");
+                taskDeadline.setText("MM/DD/YYYY");
+                taskDescription.setText("Description not found");
+            }
+
+            // Close db connection
+            dbManager.close();
+        }
+        // Otherwise, get task information from SharedPreferences
+        else {
+            // Gets the shared preferences
+            sharedPrefs=getSharedPreferences("TaskInformation", MODE_PRIVATE);
+            // Get tasks's position in SharedPreferences based on its ID
+            spPos = Integer.parseInt(String.valueOf(taskID.charAt(taskID.length() - 1)));
+
+            // Set display text to be current values from SharedPreferences
+            taskTitle.setText(sharedPrefs.getString("title" + spPos, "Task not found"));
+            taskDeadline.setText(sharedPrefs.getString("deadline" + spPos, "MM/DD/YYYY"));
+            taskDeadline.setTextColor(Color.BLACK);
+            taskDescription.setText(sharedPrefs.getString("description" + spPos, "Description not found"));
+        }
 
         // An onClickListener is created for the TextView such that users can edit the date after clicking anywhere within the field
         /*
@@ -85,7 +130,7 @@ public class EntryFormActivity extends AppCompatActivity {
             // onDateSet gets a datePicker object, and year, month, and day integers as its parameters
             // at the end of fhe format setting, the DatePickerDialog also takes the year, month, and day integers which have
             // been linked to Calendar.YEAR, Calendar.MONTH, and Calendar.DAY_OF_MONTH respectively
-            DatePickerDialog dialog = new DatePickerDialog(EntryFormActivity.this, (datePicker, yyyy, mm, dd) -> {
+            DatePickerDialog dialog = new DatePickerDialog(EditTaskActivity.this, (datePicker, yyyy, mm, dd) -> {
 
                 // Strings dayFormat and monthFormat are created for the sake of always displaying day and month in format
                 // dd and mm, even when their values are less than 2 digits
@@ -115,16 +160,6 @@ public class EntryFormActivity extends AppCompatActivity {
                     monthFormat = String.valueOf(mm);
                 }
 
-                /*
-                This colour setting has an if statement to ensure the textColor is changed from gray to black only once.
-                Essentially, if the text of taskDeadline is equal to "MM/DD/YYYY" (which only occurs in the case that a
-                date hasn't been set yet, the colour will be reset to BLACK once a date has been set. Otherwise, the text
-                color should already be black
-                */
-                if (taskDeadline.getText().equals("MM/DD/YYYY")) {
-                    taskDeadline.setTextColor(Color.BLACK);
-                }
-
                 // A formatted message is created to set the text of taskDeadline with the new selected date, ordered by
                 // MM/DD/YYYY
                 taskDeadline.setText(MessageFormat.format("{0}/{1}/{2}", monthFormat, dayFormat, String.valueOf(yyyy)));
@@ -151,12 +186,12 @@ public class EntryFormActivity extends AppCompatActivity {
             taskDescription.setText("");
 
             // Cancel then takes the user back to the Main Activity
-            Intent cancelIntent = new Intent(EntryFormActivity.this, MainActivity.class);
+            Intent cancelIntent = new Intent(EditTaskActivity.this, MainActivity.class);
             startActivity(cancelIntent);
         });
 
-        // If the createTaskButton is clicked, a few things occur. They are all defined in sections below.
-        createTaskButton.setOnClickListener(v -> {
+        // If the saveButton is clicked, a few things occur. They are all defined in sections below.
+        saveButton.setOnClickListener(v -> {
             String title=taskTitle.getText().toString().trim();
             String deadline=taskDeadline.getText().toString().trim();
 
@@ -164,12 +199,12 @@ public class EntryFormActivity extends AppCompatActivity {
 
             //check to ensure user entered task name and deadline
             if(title.isEmpty()){
-                Toast.makeText(EntryFormActivity.this, "Please enter a task title.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditTaskActivity.this, "Please enter a task title.", Toast.LENGTH_SHORT).show();
                 isValid=false;
             }
             //user must choose a deadline date
             if(deadline.equals("MM/DD/YYYY")){
-                Toast.makeText(EntryFormActivity.this, "Please choose a task deadline.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(EditTaskActivity.this, "Please choose a task deadline.", Toast.LENGTH_SHORT).show();
                 isValid=false;
             }
             //if user input is not valid, do not continue
@@ -177,38 +212,40 @@ public class EntryFormActivity extends AppCompatActivity {
                 return;
             }
 
+            // Determine whether task was saved in SQLite
+            // If so, save information to SQLite
+            if (storedInSQLite) {
+                // Open SQLite db connection
+                dbManager.open();
 
-            // In the case that the demo Checkbox is checked, the information from the taskTitle, taskDeadline
-            // and taskDescription are stored in SQLite (local database)
+                // Get task, given its id
+                Cursor cursor = dbManager.fetchTaskByID(Long.parseLong(taskID));
 
-            if(demoCheckBox.isChecked())
-            {
-                  // Uploads the data to the SQLite database
-                  dbManager.insert(taskTitle.getText().toString(), taskDeadline.getText().toString(), taskDescription.getText().toString(), true);
+                if (cursor != null && cursor.moveToFirst()) {
+                    // Set display text to be current values from SQLite
+                    dbManager.update(Long.parseLong(taskID), taskTitle.getText().toString(), taskDeadline.getText().toString(), taskDescription.getText().toString(), true);
+                    // Close cursor connection
+                    cursor.close();
+                }
+
+                // Close db connection
+                dbManager.close();
             }
-
-            // In the case that the demo Checkbox is not checked, the default storage method for the task information
-            // will be kept in SharedPreferences
+            // Otherwise, save information to SharedPreferences
             else {
                 // Gets the shared preferences
                 sharedPrefs=getSharedPreferences("TaskInformation", MODE_PRIVATE);
-                // Keep count of number of tasks
-                numOfTasks = sharedPrefs.getInt("taskCount", 0);
+                // Get tasks's position in SharedPreferences based on its ID
+                spPos = Integer.parseInt(String.valueOf(taskID.charAt(taskID.length() - 1)));
 
-                // Puts the key-value pair
+                // Updates the key-value pairs in SharedPreferences
                 SharedPreferences.Editor editor = sharedPrefs.edit();
-                editor.putString("title" + numOfTasks, taskTitle.getText().toString());
-                editor.putString("deadline" + numOfTasks, taskDeadline.getText().toString());
-                editor.putString("description" + numOfTasks, taskDescription.getText().toString());
+                editor.putString("title" + spPos, taskTitle.getText().toString());
+                editor.putString("deadline" + spPos, taskDeadline.getText().toString());
+                editor.putString("description" + spPos, taskDescription.getText().toString());
 
-                // Update count of number of tasks
-                editor.putInt("taskCount", numOfTasks + 1);
-
-                // Applies the changes to the file
+                // Applies SharedPreferences changes to the file
                 editor.apply();
-                
-                // Increases number of tasks created
-                numOfTasks++;
             }
 
             // After the task has been stored, the information must be cleared from taskTitle, taskDeadline, and taskDescription
@@ -220,8 +257,10 @@ public class EntryFormActivity extends AppCompatActivity {
 
             // A feedback message is provided to the user. The entry form is not exited out of until the cancelButton is clicked,
             // so no Intent is created to return to MainActivity
-            Toast.makeText(EntryFormActivity.this, "Task created successfully!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(EditTaskActivity.this, "Task created successfully!", Toast.LENGTH_SHORT).show();
 
+            // Destroys the activity and takes user back to MainActivity
+            finish();
         });
     }
 }

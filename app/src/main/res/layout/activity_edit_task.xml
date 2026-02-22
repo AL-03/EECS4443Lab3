@@ -1,0 +1,357 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+The main layout used for the screen is a constraint layout so that elements inside
+can be contained and not overlapped
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/editTaskMain"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F4FBF8"
+    tools:context=".EditTaskActivity">
+
+    <!--
+    A view object is created as a rectangle to be
+    the header of the screen.
+    -->
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:background="#F4FBF8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!--
+    A vertical linear layout is established to contain
+    all of the UI elements of the task creation form, which
+    are stacked on top of one another vertically and do not
+    require any scrolling, hence the reason behind the choice of
+    linear layout
+    -->
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <!--
+        The TextView appName represents the text field
+        for the name of the app as part of the header
+        The font family is set to be bolded by way of
+        sans-serif-black, with the textColor explicitly set to black
+        in case of a dark mode
+        The margin is set to start and end as 20dp (operating like
+        padding to ensure the text does not touch the ends of the
+        screen)
+        The margin also has a spacing from the top of 48dp
+        the text is alignment to teh left bby way of "textStart",
+        and is of size 36dp
+        -->
+        <TextView
+            android:id="@+id/appName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="48dp"
+            android:layout_marginEnd="20dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/taskloggerizer"
+            android:textAlignment="textStart"
+            android:textColor="#000000"
+            android:textSize="36sp" />
+
+        <!--
+        The TextView editDescription represents the text field
+        for the description of the edit task screen as the
+        second part of the header
+        The font family is set to a standard sans-serif, with a
+        black text color, and text size of 22dp
+        The left and right margins are equivalent to the appName
+        textview, with a small top margin to ensure the closeness
+        to the appName, and a large bottom margin to space out the
+        header from the rest of the elements
+        -->
+        <TextView
+            android:id="@+id/editDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="40dp"
+            android:fontFamily="sans-serif"
+            android:textColor="#000000"
+            android:text="@string/update_the_task_below"
+            android:textSize="22sp" />
+
+        <!--
+        The TextView titleLabel is one of three equivalent labels for the
+        task title, deadline, and the associated description.
+        The margins at the start and end are closer than those for the
+        appName and appDescription at 36dp
+        the top margin is present to further extend from the header,
+        and the bottom margin is minimal to be closer to the corresponding
+        editable text fields
+        The font family is set to be bolded by sans-serif-black, with the
+        text color also set to black
+        -->
+        <TextView
+            android:id="@+id/titleLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="sans-serif-black"
+            android:textColor="#000000"
+            android:text="@string/title"
+            android:textSize="16sp" />
+
+        <!--
+        The EditText field for taskTitle sets the space for the user
+        to enter the title of their new task.
+        The margins at the start and end are 36dp, matching that of
+        the associated labels.
+        The layout_height is 48dp to provide ample space for the user
+        to click the field
+        A drawable file with the mint green background color and
+        rounded corners of the field was created and set for all of the
+        input text fields on the screen
+        The ems feature was defaulted to 10, allowing the field to fit
+        10 letters for a title
+        Padding was set at 14dp to ensure the text does not touch the
+        edges of the field
+        An autoFilledHint is provided to the user in gray, letting them
+        know the field is meant to "Add a task title"
+        -->
+        <EditText
+            android:id="@+id/taskTitle"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            android:autofillHints="text"
+            android:background="@drawable/editable_text_background"
+            android:ems="10"
+            android:hint="@string/add_task_title"
+            android:inputType="text"
+            android:paddingStart="14dp"
+            android:paddingEnd="14dp"
+            android:text=""
+            android:textColor="#000000"
+            android:textColorHint="#858585" />
+
+        <!--
+        The TextView deadlineLabel is the 2nd of three equivalent labels for the
+        task title, deadline, and the associated description.
+        The margins at the start and end are 36dp again
+        the top margin is present to space the label away from the taskTitle
+        EditText field,
+        and the bottom margin is minimal to be closer to the corresponding
+        deadlineTask field
+        The font family is set to be bolded by sans-serif-black, with the
+        text color also set to black, and the text size itself is set at
+        16sp
+        -->
+        <TextView
+            android:id="@+id/deadlineLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="sans-serif-black"
+            android:textColor="#000000"
+            android:text="@string/deadline"
+            android:textSize="16sp" />
+
+        <!--
+        The TextView object taskDeadline operates as an EditText field
+        in practice with a DatePickerDialog set in the corresponding
+        Java class, but is not set as an EditText so that functionally
+        it only displays the date the user has selected
+        The background of the field is set with the same drawable file
+        created for taskTitle and taskDescription
+        The margins are set at 36dp for the start and 200dp for the end
+        so that only the date and the calendar object would fit within
+        the text
+        The calendar image has been placed in the drawable file, and is
+        called with app:drawableEndCompat to be centered and placed at the
+        right-hand side of the TextView
+        the text and drawable are padded within the field so that they
+        do not touch one another or the field's edges
+        The text's font family is set as sans-serif with originally a
+        gray colour to match the autoFillHints of the other EditText fields,
+        but is then explicitly set to black by the date picker in the Java
+        class
+        the text is vertically centered within the TextView, and is originally
+        set as MM/DD/YYYY to indicate to users the format for the date they
+        will be selecting
+        -->
+        <TextView
+            android:id="@+id/taskDeadline"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="200dp"
+            android:background="@drawable/editable_text_background"
+            android:drawablePadding="4dp"
+            android:paddingStart="14dp"
+            android:paddingEnd="18dp"
+            android:text="@string/mm_dd_yyyy"
+            android:textSize="16sp"
+            android:fontFamily="sans-serif"
+            android:gravity="center_vertical"
+            android:textColor="#858585"
+            app:drawableEndCompat="@drawable/calendar_today" />
+
+        <!--
+        The TextView descriptionLabel is the 3rd of three equivalent labels for the
+        task title, deadline, and the associated description.
+        The margins at the start and end are 36dp again
+        the top margin is present to space the label away from the taskDeadline
+        TextView field,
+        and the bottom margin is minimal to be closer to the corresponding
+        taskDescription field
+        The font family is set to be bolded by sans-serif-black, with the
+        text color also set to black, and the text size itself is set at
+        16sp
+        -->
+        <TextView
+            android:id="@+id/descriptionLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="36dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginBottom="2dp"
+            android:fontFamily="sans-serif-black"
+            android:textColor="#000000"
+            android:text="@string/description"
+            android:textSize="16sp" />
+
+        <!--
+        The EditText field taskDescription is distinguishable
+        from the previous textFields based on its height, and its
+        purpose being a multi-line editable text field (to allow
+        users to enter a long associated description for their new
+        task)
+        The background/look of the field is fetched from the same
+        drawable file associated with taskTitle and taskDeadline
+        the gravity of the text is set to be at the start and top,
+        meaning that the text being written starts at the top left
+        corner of the box
+        the text is padded from all sides to ensure it does not touch
+        the edges of the input field
+        The ems is maintained at its default of 10
+        The text's font family is sans-serif with a gray
+        hint to indicate that the field is intended for a description,
+        and a black colour once text is entered
+        -->
+        <EditText
+            android:id="@+id/taskDescription"
+            android:layout_width="match_parent"
+            android:layout_height="160dp"
+            android:layout_marginStart="36dp"
+            android:layout_marginEnd="36dp"
+            android:layout_marginBottom="10dp"
+            android:autofillHints="textMultiLine"
+            android:background="@drawable/editable_text_background"
+            android:ems="10"
+            android:gravity="start|top"
+            android:hint="@string/add_task_description"
+            android:inputType="textMultiLine"
+            android:paddingStart="14dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingEnd="14dp"
+            android:textColor="#000000"
+            android:fontFamily="sans-serif"
+            android:textColorHint="#858585" />
+
+        <!--
+        A separate layout is created to contain the buttons, to allow
+        the buttons to be set horizontally next to one another
+        -->
+        <LinearLayout
+            android:id="@+id/buttonLayout"
+            style="?android:attr/buttonBarStyle"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="50dp"
+            android:orientation="horizontal">
+
+            <!--
+            The cancel button is set to be 100dp wide
+            The start and end margins ensure the spacing between the frame and
+                the adjacent button
+            The background tint of the button matches the text field inputs
+            The colour is meant to be less attractive than the create task button
+                so that users are more inclined to create the task after entering their info
+            The button's text is set to be centred within the button
+            The padding within the button also ensures centering within the text
+            The button is aligned to the left of the layout
+            -->
+            <Button
+                android:id="@+id/cancelButton"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="15dp"
+                android:layout_weight="1"
+                android:backgroundTint="#CDE8E1"
+                android:gravity="center_horizontal|center_vertical"
+                android:paddingLeft="5dp"
+                android:paddingTop="6dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="6dp"
+                android:text="@string/cancel"
+                android:textColor="#000000"
+                tools:layout_gravity="left" />
+
+            <!--
+            The save button is set to be 100dp wide
+            The start and end margins ensure the spacing between the layout and
+                the adjacent button
+            The background tint of the button is meant to stand out among the other UI elements
+            The button's text is set to be centred within the button
+            The padding within the button also ensures centering within the text
+            The button is aligned to the right of the layout
+            -->
+            <Button
+                android:id="@+id/saveButton"
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="10dp"
+                android:layout_weight="1"
+                android:backgroundTint="#006B5F"
+                android:gravity="center_horizontal|center_vertical"
+                android:paddingLeft="5dp"
+                android:paddingTop="6dp"
+                android:paddingRight="5dp"
+                android:paddingBottom="6dp"
+                android:text="@string/save"
+                android:textColor="#FFFFFF"
+                tools:layout_gravity="right" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
